@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.biz.mapper.NoteMapper">
+    <resultMap type="com.ruoyi.biz.domain.Note" id="NoteResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="likeNumber" column="like_number"/>
+        <result property="commentNumber" column="comment_number"/>
+        <result property="tag" column="tag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectNoteVo">
+        select id,
+               title,
+               content,
+               like_number,
+               comment_number,
+               tag,
+               create_by,
+               create_time,
+               update_time
+        from note
+    </sql>
+
+    <select id="selectNoteList" parameterType="com.ruoyi.biz.domain.Note" resultMap="NoteResult">
+        <include refid="selectNoteVo"/>
+        <where>
+            <if test="title != null  and title != ''">
+                and title like concat('%', #{title}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNoteById" parameterType="Long" resultMap="NoteResult">
+        <include refid="selectNoteVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNote" parameterType="com.ruoyi.biz.domain.Note">
+        insert into note
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="likeNumber != null">
+                like_number,
+            </if>
+            <if test="commentNumber != null">
+                comment_number,
+            </if>
+            <if test="tag != null">
+                tag,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="likeNumber != null">
+                #{likeNumber},
+            </if>
+            <if test="commentNumber != null">
+                #{commentNumber},
+            </if>
+            <if test="tag != null">
+                #{tag},
+            </if>
+            <if test="createBy != null">
+                #{createBy},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateNote" parameterType="com.ruoyi.biz.domain.Note">
+        update note
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="likeNumber != null">
+                like_number = #{likeNumber},
+            </if>
+            <if test="commentNumber != null">
+                comment_number = #{commentNumber},
+            </if>
+            <if test="tag != null">
+                tag = #{tag},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoteById" parameterType="Long">
+        delete
+        from note
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteNoteByIds" parameterType="String">
+        delete from note where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

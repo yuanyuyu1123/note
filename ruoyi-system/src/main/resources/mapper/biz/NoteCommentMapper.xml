@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.biz.mapper.NoteCommentMapper">
+    <resultMap type="com.ruoyi.biz.domain.NoteComment" id="NoteCommentResult">
+        <result property="id" column="id"/>
+        <result property="noteId" column="note_id"/>
+        <result property="content" column="content"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectNoteCommentVo">
+        select id, note_id, content, create_by, create_time
+        from note_comment
+    </sql>
+
+    <select id="selectNoteCommentList" parameterType="com.ruoyi.biz.domain.NoteComment" resultMap="NoteCommentResult">
+        <include refid="selectNoteCommentVo"/>
+        <where>
+            <if test="noteId != null ">
+                and note_id = #{noteId}
+            </if>
+            <if test="content != null  and content != ''">
+                and content = #{content}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNoteCommentById" parameterType="Long" resultMap="NoteCommentResult">
+        <include refid="selectNoteCommentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNoteComment" parameterType="com.ruoyi.biz.domain.NoteComment">
+        insert into note_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="noteId != null">
+                note_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="noteId != null">
+                #{noteId},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="createBy != null">
+                #{createBy},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateNoteComment" parameterType="com.ruoyi.biz.domain.NoteComment">
+        update note_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noteId != null">
+                note_id = #{noteId},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoteCommentById" parameterType="Long">
+        delete
+        from note_comment
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteNoteCommentByIds" parameterType="String">
+        delete from note_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

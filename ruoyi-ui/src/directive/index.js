@@ -4,7 +4,7 @@ import dialogDrag from './dialog/drag'
 import dialogDragWidth from './dialog/dragWidth'
 import dialogDragHeight from './dialog/dragHeight'
 
-const install = function(Vue) {
+const install = function (Vue) {
   Vue.directive('hasRole', hasRole)
   Vue.directive('hasPermi', hasPermi)
   Vue.directive('dialogDrag', dialogDrag)

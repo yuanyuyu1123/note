@@ -1,6 +1,6 @@
-import { saveAs } from 'file-saver'
+import {saveAs} from 'file-saver'
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
+import {getToken} from '@/utils/auth'
 
 const baseURL = process.env.VUE_APP_BASE_API
 
@@ -11,7 +11,7 @@ export default {
       method: 'get',
       url: url,
       responseType: 'blob',
-      headers: { 'Authorization': 'Bearer ' + getToken() }
+      headers: {'Authorization': 'Bearer ' + getToken()}
     }).then(res => {
       const blob = new Blob([res.data])
       this.saveAs(blob, decodeURI(res.headers['download-filename']))
@@ -23,7 +23,7 @@ export default {
       method: 'get',
       url: url,
       responseType: 'blob',
-      headers: { 'Authorization': 'Bearer ' + getToken() }
+      headers: {'Authorization': 'Bearer ' + getToken()}
     }).then(res => {
       const blob = new Blob([res.data])
       this.saveAs(blob, decodeURI(res.headers['download-filename']))
@@ -35,9 +35,9 @@ export default {
       method: 'get',
       url: url,
       responseType: 'blob',
-      headers: { 'Authorization': 'Bearer ' + getToken() }
+      headers: {'Authorization': 'Bearer ' + getToken()}
     }).then(res => {
-      const blob = new Blob([res.data], { type: 'application/zip' })
+      const blob = new Blob([res.data], {type: 'application/zip'})
       this.saveAs(blob, name)
     })
   },
