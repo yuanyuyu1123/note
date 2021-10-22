@@ -44,6 +44,38 @@ public interface INoteService {
     public int updateNote(Note note);
 
     /**
+     * 修改笔记
+     *
+     * @param id 笔记
+     */
+    public void updateNoteLikeIncrement(Long id);
+
+    /**
+     * 修改笔记
+     *
+     * @param id 笔记
+     * @return 结果
+     */
+    public void updateNoteLikeDecrement(Long id);
+
+    /**
+     * 修改笔记
+     *
+     * @param id 笔记
+     * @return 结果
+     */
+    public void updateNoteCommentIncrement(Long id);
+
+    /**
+     * 修改笔记
+     *
+     * @param id 笔记
+     * @return 结果
+     */
+    public void updateNoteCommentDecrement(Long id);
+
+
+    /**
      * 批量删除笔记
      *
      * @param ids 需要删除的笔记主键集合

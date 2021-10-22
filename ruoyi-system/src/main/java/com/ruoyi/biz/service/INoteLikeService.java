@@ -30,10 +30,10 @@ public interface INoteLikeService {
     /**
      * 新增点赞
      *
-     * @param noteLike 点赞
+     * @param id 点赞
      * @return 结果
      */
-    public int insertNoteLike(NoteLike noteLike);
+    public int insertNoteLike(Long id);
 
     /**
      * 修改点赞

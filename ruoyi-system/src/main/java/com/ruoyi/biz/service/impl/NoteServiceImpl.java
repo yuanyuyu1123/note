@@ -4,6 +4,9 @@ import cn.hutool.core.util.IdUtil;
 import com.ruoyi.biz.domain.Note;
 import com.ruoyi.biz.mapper.NoteMapper;
 import com.ruoyi.biz.service.INoteService;
+import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.enums.ResultCode;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +46,7 @@ public class NoteServiceImpl implements INoteService {
      * @return 笔记
      */
     @Override
+    @DataScope
     public List<Note> selectNoteList(Note note) {
         List<Note> noteList = noteMapper.selectNoteList(note);
         log.debug("noteList={}",noteList);
@@ -58,7 +62,7 @@ public class NoteServiceImpl implements INoteService {
     @Override
     public int insertNote(Note note) {
         note.setId(IdUtil.getSnowflake(1,1).nextId());
-        note.setCreateBy(SecurityUtils.getUserId());
+        note.setCreateBy(SecurityUtils.getUserId().toString());
         note.setCreateTime(DateUtils.getNowDate());
         return noteMapper.insertNote(note);
     }
@@ -71,8 +75,33 @@ public class NoteServiceImpl implements INoteService {
      */
     @Override
     public int updateNote(Note note) {
+        Note noteById = noteMapper.selectNoteById(note.getId());
+        if(!noteById.getCreateBy().toString().equals(SecurityUtils.getUserId().toString())){
+            log.debug("{}尝试修改别人的的笔记!",SecurityUtils.getUserId());
+            throw new ServiceException("抱歉,你只能修改你自己的笔记!", ResultCode.ILLEGAL_OPERATION.getCode());
+        }
         note.setUpdateTime(DateUtils.getNowDate());
         return noteMapper.updateNote(note);
+    }
+
+    @Override
+    public void updateNoteLikeIncrement(Long id) {
+        noteMapper.updateNoteLikeIncrement(id);
+    }
+
+    @Override
+    public void updateNoteLikeDecrement(Long id) {
+        noteMapper.updateNoteLikeDecrement(id);
+    }
+
+    @Override
+    public void updateNoteCommentIncrement(Long id) {
+        noteMapper.updateNoteCommentIncrement(id);
+    }
+
+    @Override
+    public void updateNoteCommentDecrement(Long id) {
+        noteMapper.updateNoteCommentDecrement(id);
     }
 
     /**
@@ -83,6 +112,7 @@ public class NoteServiceImpl implements INoteService {
      */
     @Override
     public int deleteNoteByIds(Long[] ids) {
+
         return noteMapper.deleteNoteByIds(ids);
     }
 
@@ -94,6 +124,11 @@ public class NoteServiceImpl implements INoteService {
      */
     @Override
     public int deleteNoteById(Long id) {
+        Note noteById = noteMapper.selectNoteById(id);
+        if(!noteById.getCreateBy().toString().equals(SecurityUtils.getUserId().toString())){
+            log.debug("{}尝试删除别人的的笔记!",SecurityUtils.getUserId());
+            throw new ServiceException("抱歉,你只能删除你自己的笔记!", ResultCode.ILLEGAL_OPERATION.getCode());
+        }
         return noteMapper.deleteNoteById(id);
     }
 }

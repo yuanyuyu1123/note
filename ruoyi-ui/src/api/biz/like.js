@@ -18,11 +18,10 @@ export function getLike(id) {
 }
 
 // 新增点赞
-export function addLike(data) {
+export function addLike(id) {
   return request({
-    url: '/biz/like',
-    method: 'post',
-    data: data
+    url: '/biz/like/add/'+id,
+    method: 'get',
   })
 }
 

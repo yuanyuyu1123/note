@@ -2,12 +2,12 @@ package com.ruoyi.biz.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -20,7 +20,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoteComment implements Serializable {
+public class NoteComment extends BaseEntity {
 
     /**
      * 评论编号
@@ -37,11 +37,6 @@ public class NoteComment implements Serializable {
      * 评论内容
      */
     private String content;
-
-    /**
-     * 创建者
-     */
-    private Long createBy;
 
     /**
      * 创建时间

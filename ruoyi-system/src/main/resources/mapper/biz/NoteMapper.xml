@@ -7,6 +7,7 @@
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
+        <result property="comments" column="comments"/>
         <result property="likeNumber" column="like_number"/>
         <result property="commentNumber" column="comment_number"/>
         <result property="tag" column="tag"/>
@@ -19,6 +20,7 @@
         select id,
                title,
                content,
+               comments,
                like_number,
                comment_number,
                tag,
@@ -35,6 +37,7 @@
                 and title like concat('%', #{title}, '%')
             </if>
         </where>
+        ${params.dataScope}
     </select>
 
     <select id="selectNoteById" parameterType="Long" resultMap="NoteResult">
@@ -53,6 +56,9 @@
             </if>
             <if test="content != null">
                 content,
+            </if>
+            <if test="comments != null">
+                comments,
             </if>
             <if test="likeNumber != null">
                 like_number,
@@ -82,6 +88,9 @@
             </if>
             <if test="content != null">
                 #{content},
+            </if>
+            <if test="comments != null">
+                #{comments},
             </if>
             <if test="likeNumber != null">
                 #{likeNumber},
@@ -113,6 +122,9 @@
             <if test="content != null">
                 content = #{content},
             </if>
+            <if test="comments != null">
+                comments = #{comments},
+            </if>
             <if test="likeNumber != null">
                 like_number = #{likeNumber},
             </if>
@@ -135,6 +147,7 @@
         where id = #{id}
     </update>
 
+
     <delete id="deleteNoteById" parameterType="Long">
         delete
         from note
@@ -147,4 +160,20 @@
             #{id}
         </foreach>
     </delete>
+
+    <update id="updateNoteLikeIncrement" parameterType="long">
+        update note set like_number = like_number +1 where id=#{id}
+    </update>
+
+    <update id="updateNoteLikeDecrement" parameterType="long">
+        update note set like_number = like_number -1 where id=#{id}
+    </update>
+
+    <update id="updateNoteCommentIncrement" parameterType="long">
+        update note set comment_number = note.comment_number +1 where id=#{id}
+    </update>
+
+    <update id="updateNoteCommentDecrement" parameterType="long">
+        update note set comment_number = note.comment_number +1 where id=#{id}
+    </update>
 </mapper>

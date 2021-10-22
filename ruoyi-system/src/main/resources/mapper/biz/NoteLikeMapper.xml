@@ -18,6 +18,12 @@
     <select id="selectNoteLikeList" parameterType="com.ruoyi.biz.domain.NoteLike" resultMap="NoteLikeResult">
         <include refid="selectNoteLikeVo"/>
         <where>
+            <if test="noteId != null  and noteId != ''">
+                and note_id = #{noteId}
+            </if>
+            <if test="createBy != null  and createBy != ''">
+                and create_by = #{createBy}
+            </if>
         </where>
     </select>
 

@@ -2,6 +2,7 @@ package com.ruoyi.biz.controller;
 
 import com.ruoyi.biz.domain.Note;
 import com.ruoyi.biz.service.INoteService;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -9,6 +10,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,9 @@ public class NoteController extends BaseController {
     @Resource
     private INoteService noteService;
 
+    @Resource
+    private ISysUserService sysUserService;
+
     /**
      * 查询笔记列表
      */
@@ -46,7 +51,7 @@ public class NoteController extends BaseController {
     @GetMapping("/listSelfNote")
     public TableDataInfo listSelfNote() {
         Note note = new Note();
-        note.setCreateBy(SecurityUtils.getUserId());
+        note.setCreateBy(SecurityUtils.getUserId().toString());
         startPage();
         List<Note> list = noteService.selectNoteList(note);
         return getDataTable(list);
@@ -71,6 +76,15 @@ public class NoteController extends BaseController {
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(noteService.selectNoteById(id));
+    }
+
+    /**
+     * 获取用户详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('biz:note:query')")
+    @GetMapping("/user")
+    public AjaxResult getUser() {
+       return AjaxResult.success(sysUserService.selectUserById(SecurityUtils.getUserId()));
     }
 
     /**

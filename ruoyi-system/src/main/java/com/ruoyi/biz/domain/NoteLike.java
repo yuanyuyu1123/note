@@ -1,12 +1,12 @@
 package com.ruoyi.biz.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,7 +19,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoteLike implements Serializable {
+public class NoteLike extends BaseEntity {
 
     /**
      * 点赞编号
@@ -30,11 +30,6 @@ public class NoteLike implements Serializable {
      * 笔记编号
      */
     private Long noteId;
-
-    /**
-     * 创建者
-     */
-    private Long createBy;
 
     /**
      * 创建时间

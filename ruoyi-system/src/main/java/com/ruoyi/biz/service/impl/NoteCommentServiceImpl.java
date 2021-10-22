@@ -3,6 +3,7 @@ package com.ruoyi.biz.service.impl;
 import com.ruoyi.biz.domain.NoteComment;
 import com.ruoyi.biz.mapper.NoteCommentMapper;
 import com.ruoyi.biz.service.INoteCommentService;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class NoteCommentServiceImpl implements INoteCommentService {
      */
     @Override
     public int insertNoteComment(NoteComment noteComment) {
-        noteComment.setCreateBy(SecurityUtils.getUserId());
+        noteComment.setCreateBy(SecurityUtils.getUserId().toString());
         noteComment.setCreateTime(DateUtils.getNowDate());
         return noteCommentMapper.insertNoteComment(noteComment);
     }

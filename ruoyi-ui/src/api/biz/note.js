@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import {praseStrEmpty} from "@/utils/ruoyi";
 
 // 查询笔记列表
 export function listNote(query) {
@@ -21,6 +22,14 @@ export function listSelfNote() {
 export function getNote(id) {
   return request({
     url: '/biz/note/' + id,
+    method: 'get'
+  })
+}
+
+// 查询用户详细
+export function getUser() {
+  return request({
+    url: '/biz/note/user',
     method: 'get'
   })
 }

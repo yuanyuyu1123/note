@@ -1,15 +1,21 @@
 package com.ruoyi.biz.service.impl;
 
+import cn.hutool.core.util.IdUtil;
+import com.ruoyi.biz.domain.Note;
 import com.ruoyi.biz.domain.NoteLike;
 import com.ruoyi.biz.mapper.NoteLikeMapper;
 import com.ruoyi.biz.service.INoteLikeService;
+import com.ruoyi.biz.service.INoteService;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 点赞Service业务层处理
@@ -21,6 +27,9 @@ import java.util.List;
 public class NoteLikeServiceImpl implements INoteLikeService {
     @Resource
     private NoteLikeMapper noteLikeMapper;
+
+    @Resource
+    private INoteService noteService;
 
     /**
      * 查询点赞
@@ -47,13 +56,19 @@ public class NoteLikeServiceImpl implements INoteLikeService {
     /**
      * 新增点赞
      *
-     * @param noteLike 点赞
+     * @param id 笔记编号
      * @return 结果
      */
     @Override
-    public int insertNoteLike(NoteLike noteLike) {
-        noteLike.setCreateBy(SecurityUtils.getUserId());
+    @Transactional(rollbackFor = {Exception.class})
+    public int insertNoteLike(Long id) {
+        NoteLike noteLike = new NoteLike();
+        noteLike.setCreateBy(SecurityUtils.getUserId().toString());
         noteLike.setCreateTime(DateUtils.getNowDate());
+        noteLike.setNoteId(id);
+        noteLike.setId(IdUtil.getSnowflake(1,1).nextId());
+
+        noteService.updateNoteLikeIncrement(id);
         return noteLikeMapper.insertNoteLike(noteLike);
     }
 
@@ -86,7 +101,13 @@ public class NoteLikeServiceImpl implements INoteLikeService {
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public int deleteNoteLikeById(Long id) {
-        return noteLikeMapper.deleteNoteLikeById(id);
+        NoteLike noteLike = new NoteLike();
+        noteLike.setCreateBy(SecurityUtils.getUserId().toString());
+        noteLike.setNoteId(id);
+        List<NoteLike> noteLikes = noteLikeMapper.selectNoteLikeList(noteLike);
+        noteService.updateNoteLikeDecrement(id);
+        return noteLikeMapper.deleteNoteLikeById(noteLikes.get(0).getId());
     }
 }
